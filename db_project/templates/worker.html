@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Worker Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f9f4;
+            color: #2f4f2f;
+            margin: 0;
+            padding: 20px 40px 100px 40px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: linear-gradient(135deg, #4caf50, #087f23);
+            color: white;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .welcome-msg {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #0c6c10;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 50px;
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #66bb6a;
+            color: white;
+        }
+
+        thead th, tbody td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #e8f5e9;
+        }
+
+        tbody tr:hover {
+            background-color: #c8e6c9;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination .current, .pagination .ellipsis {
+            margin: 0 5px;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .pagination a {
+            background: #66bb6a;
+            color: white;
+        }
+        .pagination .current {
+            background: #2e7d32;
+            color: #fff;
+            font-weight: bold;
+        }
+        .pagination .ellipsis {
+            color: #555;
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="POST" action="{{ url_for('logout') }}" style="position:absolute; top:20px; right:40px;">
+        <button type="submit" class="logout-btn">Log out</button>
+    </form>
+
+    <p class="welcome-msg">Welcome, {{ user_name }}!</p>
+
+    <h1>Task List</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Weight (kg)</th>
+                <th>Date</th>
+                <th>Collection Point</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in wastes %}
+            <tr>
+                <td>{{ w.Type }}</td>
+                <td>{{ w.WeightKg }}</td>
+                <td>{{ w.WasteDate }}</td>
+                <td>{{ w.CollectionPointName }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% for p in pagination_pages %}
+            {% if p == '...' %}
+                <span class="ellipsis">...</span>
+            {% elif p == page %}
+                <span class="current">{{ p }}</span>
+            {% else %}
+                <a href="{{ url_for('worker_dashboard') }}?page={{ p }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+</body>
+</html>

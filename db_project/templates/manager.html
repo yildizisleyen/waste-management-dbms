@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Official Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f1f8e9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            background-color: #689f38;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        main {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto 60px auto;
+        }
+        h2 {
+            color: #33691e;
+            margin-top: 40px;
+            text-align: center;
+            font-weight: 700;
+        }
+        h4 {
+            font-weight: 700;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #c5e1a5;
+            text-align: center;
+        }
+        th {
+            background-color: #8bc34a;
+            color: white;
+            font-weight: 700;
+        }
+        td {
+            background-color: #ffffff;
+            font-weight: 500;
+        }
+        .logout-button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 0 auto;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+        .logout-button:hover {
+            background-color: #c62828;
+        }
+        .analysis-box {
+            background: white;
+            margin-top: 50px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 15px #a5d6a7;
+            color: #33691e;
+            font-weight: 600;
+            font-size: 1.2em;
+            text-align: center;
+            white-space: pre-wrap;
+        }
+        .table-container {
+            max-height: 400px;   
+            overflow-y: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #c5e1a5;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Welcome, {{ user_name }}.
+    </header>
+
+    <main>
+        <h2>Collection Points</h2>
+        {% if collection_points %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Region</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cp in collection_points %}
+                <tr>
+                    <td>{{ cp.Name }}</td>
+                    <td>{{ cp.Address }}</td>
+                    <td>{{ cp.Region }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p style="text-align:center; color:#33691e; font-weight: 600; margin-top: 20px;">There is no designated collection point.</p>
+        {% endif %}
+
+        <h2>Worker Task Distribution</h2>
+        {% if workers %}
+        <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; box-shadow: 0 0 12px #a5d6a7;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Worker ID</th>
+                        <th>Name Surname</th>
+                        <th>Duty Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for worker in workers %}
+                    <tr>
+                        <td>{{ worker.UserID }}</td>
+                        <td>{{ worker.FullName }}</td>
+                        <td>{{ worker.CollectionPointName if worker.CollectionPointName else "Not Assigned" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 25px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                {% for collection_point in collection_points %}
+                <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 0 10px #c5e1a5; min-width: 280px;">
+                    <h4 style="color: #558b2f; margin-bottom: 12px;">{{ collection_point.Name }}</h4>
+
+                    <form action="{{ url_for('remove_worker') }}" method="post">
+                        <input type="hidden" name="collection_point" value="{{ collection_point.CollectionPointID }}">
+                        <input type="text" name="worker_id" placeholder="Worker ID" required
+                            style="width: 100%; padding: 8px; border: 1px solid #a5d6a7; border-radius: 6px; margin-bottom: 6px; font-size: 0.9em;">
+                        <button type="submit"
+                            style="width: 100%; background-color: #e53935; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1em;">
+                            Remove
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <p style="text-align:center; color:#33691e; font-weight: 600; margin-top: 20px;">There are no assigned workers in this region.</p>
+        {% endif %}
+
+        <h2>Waste Records</h2>
+        {% if wastes %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Weight (kg)</th>
+                        <th>Date</th>
+                        <th>Collection Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for waste in wastes %}
+                    <tr>
+                        <td>{{ waste.Type }}</td>
+                        <td>{{ "%.2f"|format(waste.WeightKg) }}</td>
+                        <td>{{ waste.WasteDate }}</td>
+                        <td>{{ waste.CollectionPointName }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p style="text-align:center; color:#33691e; font-weight: 600; margin-top: 20px;">There is no waste record yet.</p>
+        {% endif %}
+
+        <div class="analysis-box">
+            {{ analysis_text }}
+        </div>
+
+        <form method="post" action="{{ url_for('logout') }}">
+            <button type="submit" class="logout-button">Log out</button>
+        </form>
+    </main>
+</body>
+</html>

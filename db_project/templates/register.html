@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #d4f1d4, #a8e6a1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2e4f2e;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #a5d6a7;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        select {
+            background-color: white;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .register-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            display: inline-block;
+            font-size: 0.9em;
+            color: #388e3c;
+            text-decoration: none;
+            border: 1px solid #388e3c;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: #e8f5e9;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .login-link:hover {
+            background-color: #388e3c;
+            color: white;
+        }
+
+        .error {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .error.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .error.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .error.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" class="register-container" novalidate>
+        <h2>Sign in</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="error {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <input type="text" name="full_name" placeholder="Name Surname" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        
+        <select name="user_type" required>
+            <option value="" disabled selected>Select User Type</option>
+            <option value="Citizen">Citizen</option>
+            <option value="Worker">Worker</option>
+            <option value="Official">Official</option>
+        </select>
+
+        <button type="submit" class="register-btn">Sign in</button>
+
+        <a href="{{ url_for('login') }}" class="login-link">Already have an account? Log in</a>
+    </form>
+</body>
+</html>

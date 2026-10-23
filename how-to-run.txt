@@ -1,0 +1,30 @@
+1. Make sure you have the following installed:
+	-Python 3.9.0
+	-MySQL Ver 8.0.42 (Developer)
+		-MySQL Server
+		-MySQL Workbench (for database GUI)
+		-MySQL Router
+		-MySQL Shell
+	--MySQL connector for Python must be downloaded separately: pip install mysql-connector-python
+	-Flask Framework: pip install flask flask-mysqldb
+2. Create and activate a virtual environment (optinal)
+	-For Windows
+		python -m venv venv
+		venv\Scripts\activate
+3. Open MySQL Workbench or Terminal (Database Setup)
+4. Run "finaldump.sql" -(If an error occurs, USE waste_management_db; should be added to the beginning of the finaldump file.)
+5. Open "app.py" file. (Coded using Visual Studio Code.)
+	-Update database connection details if necessary in db.py
+6. Run the "app.py".
+	-Running on http://127.0.0.1:5000
+7. Open your browser and go to http://127.0.0.1:5000
+8. In this project, there are three different register types.
+	1. Citizen (Example of existing data)
+		--Email: deniz.derya@example.com
+		--Password: d111
+	2. Worker (Example of existing data)
+		--Email: gul@example.com
+		--Password: h555
+	3. Official (Example of existing data)
+		--Email: kerem@example.com
+		--Password: h999

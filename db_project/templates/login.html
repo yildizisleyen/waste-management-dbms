@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #d4f1d4, #a8e6a1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2e4f2e;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #a5d6a7;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .home-btn,
+        .register-btn {
+            margin-top: 15px;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #388e3c;
+            background-color: #e8f5e9;
+            border: 1px solid #388e3c;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .home-btn:hover,
+        .register-btn:hover {
+            background-color: #388e3c;
+            color: white;
+        }
+
+        .error {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .error.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .error.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .error.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" class="login-container" novalidate>
+        <h2>Login</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="error {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit" class="login-btn">Login</button>
+
+        <div style="margin-top: 15px;">
+            <a href="{{ url_for('index') }}" class="home-btn">Home</a>
+            <a href="{{ url_for('register') }}" class="register-btn">Sign in</a>
+        </div>
+    </form>
+</body>
+</html>
